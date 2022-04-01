@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta name = "viewport" content="with=device-width, initial-scale = 1.0">
+    <title>The PowerPlant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
+</head>
+<body>
+    <section class="header">
+        <nav>
+            <a href="index.html"><img src="images/logo.png"></a>
+            <div class="nav-links" id="navLinks">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="plants.html">PLANTS</a></li>
+                    <li><a href="">BLOG</a></li>
+                    <li><a href="livestream.html">LIVE STREAM</a></li>
+                    <li><a href="">CONTACT US</a></li>
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+    <div class="text-box">
+        <h1>The Power Plant</h1>
+        <p>A fully automated growing system for all your plant needs. <br> Sit back and relax while our system takes care of the light schedule, water schedule, PH monitoring, and so much more!</p>
+        <a href="command_center.html" class="hero-btn">The Command Center</a>
+    </div>
+
+    </section>
+
+
+    <!----- Functionality ----->
+
+    <section class='Functionality'>
+        <h1>What Our System Does</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+        <div class = "row">
+            <div class = "Functionality-col">
+                <h3>Light</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
+
+            <div class = "Functionality-col">
+                <h3>Water</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
+
+            <div class = "Functionality-col">
+                <h3>Chemical Balance</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!----- JavaScript for Toggle Menu----->
+
+    <script>
+        var navLinks = document.getElementById("navLinks");
+        function showMenu(){
+            navLinks.style.right = "0";
+        }
+
+        function hideMenu(){
+            navLinks.style.right = "-200px";
+        }
+
+    </script>
+
+</body>
+</html>
