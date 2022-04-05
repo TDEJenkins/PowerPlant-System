@@ -1,12 +1,12 @@
 # code gathered from this webpage:
-https://problemsolvingwithpython.com/11-Python-and-External-Hardware/11.04-Reading-a-Sensor-with-Python/
+#https://problemsolvingwithpython.com/11-Python-and-External-Hardware/11.04-Reading-a-Sensor-with-Python/
 
 # import the PySerial module
 import serial
 import time
 
 # set up the serial line
-ser = serial.Serial('COM#', ####) #('COM4', 9600)
+ser = serial.Serial('COM5', 9600) #('COM4', 9600)
 time.sleep(2)
 
 
@@ -16,7 +16,7 @@ time.sleep(2)
 data =[]                       # empty list to store the data
 for i in range(50):
     b = ser.readline()         # read a byte string
-        string_n = b.decode()  # decode byte string into Unicode  
+    string_n = b.decode()  # decode byte string into Unicode  
     string = string_n.rstrip() # remove \n and \r
     flt = float(string)        # convert string to float
     print(flt)
