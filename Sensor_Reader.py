@@ -4,6 +4,9 @@
 # import the PySerial module
 import serial
 import time
+import base64
+from github import Github
+from github import InputGitTreeElement
 
 # expirement counter, tracks the number to make sure we do not overwrite files
 replicate = 1
@@ -54,6 +57,34 @@ plt.show()
 # save plot to a file
 plt.savefig('moisture_plot' + str(replicate)+'.png')
 
-!git add 'moisture_polt.png'
-!git commit -m "added file1.m"
-!git push
+
+user = "TDEJenkins"
+password = "********"
+g = Github(user,password)
+repo = g.get_user().get_repo('PowerPlant-System') # repo name
+file_list = [
+    'C:\Users\tayso\OneDrive\Desktop\moisture_plot.png',
+    'C:\Users\tayso\OneDrive\Desktop\moisture_data.txt'
+]
+file_names = [
+    'moisture_plot.png',
+    'moisture_data.txt'
+]
+commit_message = 'python commit'
+master_ref = repo.get_git_ref('heads/master')
+master_sha = master_ref.object.sha
+base_tree = repo.get_git_tree(master_sha)
+
+element_list = list()
+for i, entry in enumerate(file_list):
+    with open(entry) as input_file:
+        git_data = input_file.read()
+    if entry.endswith('.png'): # images must be encoded
+        git_data = base64.b64encode(git_data)
+    element = InputGitTreeElement(file_names[i], '100644', 'blob', git_data)
+    element_list.append(element)
+
+tree = repo.create_git_tree(element_list, base_tree)
+parent = repo.get_git_commit(master_sha)
+commit = repo.create_git_commit(commit_message, tree, [parent])
+master_ref.edit(commit.sha)
