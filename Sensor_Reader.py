@@ -1,12 +1,8 @@
-# code gathered from this webpage:
-#https://problemsolvingwithpython.com/11-Python-and-External-Hardware/11.04-Reading-a-Sensor-with-Python/
 
 # import the PySerial module
 import serial
 import time
-import base64
-from github import Github
-from github import InputGitTreeElement
+from git import Repo
 
 # expirement counter, tracks the number to make sure we do not overwrite files
 replicate = 1
@@ -57,34 +53,18 @@ plt.show()
 # save plot to a file
 plt.savefig('moisture_plot' + str(replicate)+'.png')
 
+# function that sends files to github repository
 
-user = "TDEJenkins"
-password = "********"
-g = Github(user,password)
-repo = g.get_user().get_repo('PowerPlant-System') # repo name
-file_list = [
-    'C:\Users\tayso\OneDrive\Desktop\moisture_plot.png',
-    'C:\Users\tayso\OneDrive\Desktop\moisture_data.txt'
-]
-file_names = [
-    'moisture_plot.png',
-    'moisture_data.txt'
-]
-commit_message = 'python commit'
-master_ref = repo.get_git_ref('heads/master')
-master_sha = master_ref.object.sha
-base_tree = repo.get_git_tree(master_sha)
+PATH_OF_GIT_REPO = r'C:/Users/tayso/PowerPlant-System'  # make sure .git folder is properly configured on PC
+COMMIT_MESSAGE = 'comment from python script'
 
-element_list = list()
-for i, entry in enumerate(file_list):
-    with open(entry) as input_file:
-        git_data = input_file.read()
-    if entry.endswith('.png'): # images must be encoded
-        git_data = base64.b64encode(git_data)
-    element = InputGitTreeElement(file_names[i], '100644', 'blob', git_data)
-    element_list.append(element)
-
-tree = repo.create_git_tree(element_list, base_tree)
-parent = repo.get_git_commit(master_sha)
-commit = repo.create_git_commit(commit_message, tree, [parent])
-master_ref.edit(commit.sha)
+def git_push():
+    try:
+        repo = Repo.init(PATH_OF_GIT_REPO) # initialize repository
+        repo.index.add('PowerPlant-System/moisture_data.csv','PowerPlant-System/moisture_plot.png') #add files, configure correctly before use
+        repo.index.commit(COMMIT_MESSAGE) # stages the commit with pre made message
+        origin = repo.remote(name='origin') # define origin and remote location
+        origin.push(force = True) # force pushes the commit to the repository
+    except:
+        print('Some error occured while pushing the code') # if error occurs
+git_push() # calls function 
