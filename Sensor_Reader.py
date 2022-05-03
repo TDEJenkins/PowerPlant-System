@@ -2,10 +2,23 @@
 # import the PySerial module
 import serial
 import time
+from lib2to3.pytree import convert
 from git import Repo
 
 # expirement counter, tracks the number to make sure we do not overwrite files
 replicate = 1
+
+
+#user inputs different watering levels to set what is over adn under watered for plant being sensored
+overwater = (input("Enter over watering levels: "))
+print("Overwatering level set to " + overwater)
+underwater = (input("Enter under watering levels: "))
+print("Underwatering level set to " + underwater)
+
+#converts overwater and underwater variables to an integer
+convert_underwater = int(underwater)
+convert_overwater = int(overwater)
+
 
 # set up the serial line
 ser = serial.Serial('COM5', 9600) #('COM4', 9600)
@@ -26,6 +39,32 @@ for i in range(50):
     time.sleep(0.1)            # wait (sleep) 0.1 seconds
 
 ser.close()
+
+
+# function that sets up files to github repository
+PATH_OF_GIT_REPO = r'C:/Users/tayso/PowerPlant-System'  # make sure .git folder is properly configured on PC
+COMMIT_MESSAGE = 'Power Plant System Alert!'
+
+def git_push():
+    try:
+        repo = Repo.init(PATH_OF_GIT_REPO) # initialize repository
+        repo.index.add('PowerPlant-System/moisture_data.csv','PowerPlant-System/moisture_plot.png') #add files, configure correctly before use
+        repo.index.commit(COMMIT_MESSAGE) # stages the commit with pre made message
+        origin = repo.remote(name='origin') # define origin and remote location
+        origin.push(force = True) # force pushes the commit to the repository
+    except:
+        print('Some error occured while pushing the code') # if error occurs
+
+
+# code that reads the data list and sends discord alert if user over and water levels were reached while reading
+if any(x <= convert_underwater for x in data):
+    COMMIT_MESSAGE = 'Power Plant System Alert: Plant is Underwatered! Check for issue.'
+    print('Power Plant System Alert: Plant is Underwatered! Check for issue.')
+    git_push() # calls function
+elif any(x >= convert_overwater for x in data):
+    COMMIT_MESSAGE = 'Power Plant System Alert: Plant is Overwatered! Check for issue.'
+    print('Power Plant System Alert: Plant is overwatered! Check for issue.')
+    git_push() # calls function
 
 # show the data
 for line in data:
@@ -52,19 +91,3 @@ plt.show()
 
 # save plot to a file
 plt.savefig('moisture_plot' + str(replicate)+'.png')
-
-# function that sends files to github repository
-
-PATH_OF_GIT_REPO = r'C:/Users/tayso/PowerPlant-System'  # make sure .git folder is properly configured on PC
-COMMIT_MESSAGE = 'comment from python script'
-
-def git_push():
-    try:
-        repo = Repo.init(PATH_OF_GIT_REPO) # initialize repository
-        repo.index.add('PowerPlant-System/moisture_data.csv','PowerPlant-System/moisture_plot.png') #add files, configure correctly before use
-        repo.index.commit(COMMIT_MESSAGE) # stages the commit with pre made message
-        origin = repo.remote(name='origin') # define origin and remote location
-        origin.push(force = True) # force pushes the commit to the repository
-    except:
-        print('Some error occured while pushing the code') # if error occurs
-git_push() # calls function 
